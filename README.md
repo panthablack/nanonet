@@ -60,5 +60,16 @@ The train method returns the updated instance of the NanoNet class.
 
 **Important** \- The length of the input and expected output arrays must match the input and output structure of the network.
 
+### Properties
+
+#### .learningRate
+
+The learning rate can be manually updated by reassigning the value of the property:
+```javascript
+let neuralNetwork = new NanoNet();
+neuralNetwork.learningRate = 0.02;
+```
+The default learning rate is 0.1;
+
 ## License
 [MIT](http://opensource.org/licenses/MIT)
