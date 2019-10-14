@@ -21,7 +21,7 @@ export default class NanoNet {
                 layer.biases.push(0);
                 layer.weights.push([]);
                 for (let k = 0; k < structure[l - 1]; k++) {
-                    layer.weights[j].push(NeuralNetwork.random(-1,1));
+                    layer.weights[j].push(NanoNet.random(-1,1));
                 }
             }
             this.layers[l] = layer;
@@ -67,7 +67,7 @@ export default class NanoNet {
     applyActivationFunction(arr) {
         let activated = []
         for (let i in arr) {
-            activated[i] = NeuralNetwork.sigmoid(arr[i]);         
+            activated[i] = NanoNet.sigmoid(arr[i]);         
         }
         return activated;
     }
@@ -75,7 +75,7 @@ export default class NanoNet {
     applyActivationFunctionDerivative(arr) {
         let differentiated = []
         for (let i in arr) {
-            differentiated[i] = NeuralNetwork.sigmoidDerivative(arr[i]);         
+            differentiated[i] = NanoNet.sigmoidDerivative(arr[i]);         
         }
         return differentiated;
     }
@@ -157,7 +157,7 @@ export default class NanoNet {
             for (let k in inputActivations) {
                 weightedActivations[k] = weights[j][k] * inputActivations[k];
             }
-            let summed = NeuralNetwork.sum(weightedActivations);
+            let summed = NanoNet.sum(weightedActivations);
             weightedInputs[j] = summed + biases[j];
         }
         return weightedInputs;
@@ -170,7 +170,7 @@ export default class NanoNet {
             for (let k in followingDeltas) {
                 weightedDelta[k] = transposed[j][k] * followingDeltas[k];
             }
-            let summed = NeuralNetwork.sum(weightedDelta);
+            let summed = NanoNet.sum(weightedDelta);
             weightedDeltas[j] = summed;
         }
         return weightedDeltas;
@@ -239,7 +239,7 @@ export default class NanoNet {
 
     static sigmoidDerivative(x) {
         if (typeof x === 'number') {
-            let sigX = NeuralNetwork.sigmoid(x);
+            let sigX = NanoNet.sigmoid(x);
             return sigX * (1 - sigX);
         } else {
             throw 'Argument must be a number.'
