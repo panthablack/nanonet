@@ -52,7 +52,7 @@ let trainingData = [
     [7.5,0.40576,8],
     // and the second holding the expected output
     [0,1],
-  ], //\.\.\.
+  ], // ...
 ];
 let trained = neuralNetwork.train(trainingData);
 ```
