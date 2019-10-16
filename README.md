@@ -27,7 +27,7 @@ let neuralNetwork = new NanoNet(structure);
 ```
 The array length defines the number of layers in the network, whilst the integer values define how many neurons should be initialised in each layer, e.g., a network with an input layer with 16 neurons and an output layer with 9 neurons would have a structure [16,9].  To add in 3 hidden layers, with 4,5 and 6 neurons respectively, the structure becomes [16,4,5,6,9].
 
-*The default structure is [2,2,2].*
+The default structure is [2,2,2].
 
 ### Methods
 
