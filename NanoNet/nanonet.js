@@ -215,7 +215,7 @@ export default class NanoNet {
                 throw 'Range must be non-zero.'
             }
         } else {
-            throw 'Range min and max arguments must be valid numbers.'
+            throw 'random expects numbers.'
         }
     }
 
@@ -228,12 +228,15 @@ export default class NanoNet {
             } else if (sig > 1) {
                 return 1;
             } else if (Number.isNaN(sig)) {
-                return 0.5;
+                if (x === 0) {
+                    return 0.5;
+                }
+                return x > 0 ? 1 : 0;
             } else {
                 return sig;
             }
         } else {
-            throw 'Argument must be a number.'
+            throw 'sigmoid expects a number.'
         }
     }
 
@@ -242,11 +245,12 @@ export default class NanoNet {
             let sigX = NanoNet.sigmoid(x);
             return sigX * (1 - sigX);
         } else {
-            throw 'Argument must be a number.'
+            throw 'sigmoidDerivative expects a number.'
         }
     }
 
     static sum(arr) {
+        let err = 'Sum expects an array of numbers.';
         if (Array.isArray(arr) && arr.length) {
             let sum = 0;
             for (let i = 0; i < arr.length; i++) {
@@ -254,23 +258,23 @@ export default class NanoNet {
                 if (typeof n === 'number' && !Number.isNaN(n)) {
                     sum += n;
                 } else {
-                    throw 'Sum function can only sum numbers.'
+                    throw err;
                 }
             }
             return sum;
         } else {
-            throw 'Sum function can only accept arrays as arguments.'
+            throw err;
         }
     }
 
 
     // utility functions
 
-    halt(message = null) {
-        if (message) {
-            console.log(message);
-        }
-        throw 'halted';
-    }
+    // halt(message = null) {
+    //     if (message) {
+    //         console.log(message);
+    //     }
+    //     throw 'halted';
+    // }
 
 }
