@@ -2,6 +2,23 @@
 A lightweight neural network class for JavaScript.
 
 ## Install Instructions
+
+### via npm
+
+- run install command from terminal
+
+```bash
+npm install nanonet
+```
+
+- Import the NanoNet class into your project, e.g.,
+
+```javascript
+import NanoNet from 'nanonet'
+```
+
+### via download
+
 - *Download* or *Clone* repository and unzip.
 - Import the NanoNet class into your project, e.g.,
 
