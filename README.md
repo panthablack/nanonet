@@ -55,6 +55,12 @@ let fed = neuralNetwork.feedForward(inputData);
 ```
 Given an array of input data, the feedForward method feeds the data forwards through the network and returns the NanoNet instance that was fed.  *Data must be numeric.*
 
+In order to retrieve the output activations use the **output** getter, e.g.,
+
+```javascript
+let output = fed.output;
+```
+
 **Important** \- The length of the array must match the length of the input layer to the network.  Hopefully this is intuitive as each piece of data corresponds to an input activation.
 
 #### .train(trainingData)
@@ -81,7 +87,7 @@ The train method returns the updated instance of the NanoNet class.
 
 ### Properties
 
-#### .learningRate
+#### learningRate
 
 The learning rate can be manually updated by reassigning the value of the property:
 ```javascript
@@ -89,6 +95,16 @@ let neuralNetwork = new NanoNet();
 neuralNetwork.learningRate = 0.02;
 ```
 The default learning rate is 0.1;
+
+### Getters
+
+#### input
+
+Returns an array containing the network's current input values.
+
+#### output
+
+Returns an array containing the network's current output activations.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
