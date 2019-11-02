@@ -55,13 +55,13 @@ let fed = neuralNetwork.feedForward(inputData);
 ```
 Given an array of input data, the feedForward method feeds the data forwards through the network and returns the NanoNet instance that was fed.  *Data must be numeric.*
 
+**Important** \- The length of the array must match the length of the input layer to the network.  Hopefully this is intuitive as each piece of data corresponds to an input activation.
+
 In order to retrieve the output activations use the **output** getter, e.g.,
 
 ```javascript
 let output = fed.output;
 ```
-
-**Important** \- The length of the array must match the length of the input layer to the network.  Hopefully this is intuitive as each piece of data corresponds to an input activation.
 
 #### .train(trainingData)
 
