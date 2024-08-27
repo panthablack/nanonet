@@ -1,6 +1,6 @@
 <template>
   <div class="dashboardViewContainer">
-    <h1>Dashboard</h1>
+    <h1 class="clickable">Dashboard</h1>
     <Button
       @click="startNanonet"
       v-if="!started"
