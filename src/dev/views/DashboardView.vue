@@ -2,8 +2,8 @@
   <div class="dashboardViewContainer">
     <h1 class="text-xl font-bold mb-4">Dashboard</h1>
     <PrimaryButton
-      @click="startNanonet"
-      v-if="!started"
+      @click="nanonetStore.startNanonet"
+      v-if="!nanonetStore.started"
     >
       Start NanoNet
     </PrimaryButton>
@@ -14,5 +14,5 @@
 import PrimaryButton from '@/dev/components/buttons/PrimaryButton.vue'
 import { useNanonetStore } from '@/dev/stores/nanonetStore'
 
-const { started, startNanonet } = useNanonetStore()
+const nanonetStore = useNanonetStore()
 </script>
