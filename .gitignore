@@ -30,3 +30,4 @@ coverage
 
 # Ignore lock files as part of package
 /yarn.lock
+/package-lock.json
