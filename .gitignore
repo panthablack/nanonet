@@ -27,3 +27,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Ignore lock files as part of package
+/package-lock.json
+/yarn.lock
