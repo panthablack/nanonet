@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import DefaultLayout from '@/dev/layouts/DefaultLayout.vue'
-import { ref } from 'vue'
+import { markRaw, ref } from 'vue'
 
-const layout = ref(DefaultLayout)
+const layout = ref(markRaw(DefaultLayout))
 </script>

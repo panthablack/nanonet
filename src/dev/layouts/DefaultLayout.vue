@@ -5,8 +5,10 @@ import { RouterView } from 'vue-router'
 
 <template>
   <div class="defaultLayoutContainer">
-    <NavBar />
-    <div class="routerViewContainer">
+    <header class="navBarContainer">
+      <NavBar />
+    </header>
+    <div class="routerViewContainer p-4">
       <RouterView />
     </div>
   </div>

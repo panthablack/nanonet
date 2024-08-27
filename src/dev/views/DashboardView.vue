@@ -1,17 +1,17 @@
 <template>
   <div class="dashboardViewContainer">
-    <h1 class="clickable">Dashboard</h1>
-    <Button
+    <h1 class="text-xl font-bold mb-4">Dashboard</h1>
+    <PrimaryButton
       @click="startNanonet"
       v-if="!started"
     >
       Start NanoNet
-    </Button>
+    </PrimaryButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import Button from '@/dev/components/PrimaryButton.vue'
+import PrimaryButton from '@/dev/components/buttons/PrimaryButton.vue'
 import { useNanonetStore } from '@/dev/stores/nanonetStore'
 
 const { started, startNanonet } = useNanonetStore()
