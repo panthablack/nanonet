@@ -2,10 +2,10 @@
   <div class="dashboardViewContainer">
     <h1 class="text-xl font-bold mb-4">Dashboard</h1>
     <PrimaryButton
-      @click="nanonetStore.startNanonet"
-      v-if="!nanonetStore.started"
+      @click="nanonetStore.createNanonet"
+      v-if="!nanonetStore.creating"
     >
-      Start NanoNet
+      Create New NanoNet
     </PrimaryButton>
   </div>
 </template>
