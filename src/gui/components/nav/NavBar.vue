@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavBarLink from '@/dev/components/nav/NavBarLink.vue'
+import NavBarLink from '@/gui/components/nav/NavBarLink.vue'
 </script>
 
 <template>

@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts">
-import PrimaryButton from '@/dev/components/buttons/PrimaryButton.vue'
-import { useNanonetStore } from '@/dev/stores/nanonetStore'
+import PrimaryButton from '@/gui/components/buttons/PrimaryButton.vue'
+import { useNanonetStore } from '@/gui/stores/nanonetStore'
 
 const nanonetStore = useNanonetStore()
 </script>
