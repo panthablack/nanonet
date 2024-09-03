@@ -1,14 +1,14 @@
 import { describe, it, expect, expectTypeOf } from 'vitest'
-import type { NanoNet } from '@/types/NanoNet'
+import type { NanoNetModel } from '@/types/NanoNet'
 
-import { createNanonet } from '@/nanonet'
+import { createModel } from '@/nanonet'
 
-describe('createNanonet', () => {
+describe('createModel', () => {
   it('should be a function', () => {
-    expect(typeof createNanonet).toBe('function')
+    expect(typeof createModel).toBe('function')
   })
 
-  it('should return an instance of NanoNet', () => {
-    expectTypeOf(createNanonet()).toMatchTypeOf<NanoNet>()
+  it('should return an instance of NanoNetModel', () => {
+    expectTypeOf(createModel()).toMatchTypeOf<NanoNetModel>()
   })
 })
