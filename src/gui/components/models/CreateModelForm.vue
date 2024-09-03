@@ -1,18 +1,29 @@
 <template>
   <div class="createModelFormContainer">
     <PrimaryButton
-      @click="nanonetStore.createNanonet"
-      :disabled="nanonetStore.creating"
+      @click="onCreateClicked"
+      :disabled="creating"
       :text="createModelButtonText"
     />
     <Modal
-      :modelValue="nanonetStore.creating"
-      @update:modelValue="nanonetStore.abortCreation"
+      :modelValue="creating"
+      @update:modelValue="abortCreation"
     >
-      <p>Hello Joe!</p>
-    </Modal>
-    <Modal v-model="showTestModal">
-      <p>Hello Joe! This is the test Modal!</p>
+      <ModalHeading>Create New Model</ModalHeading>
+      <ModalBody
+        hasFooter
+        hasHeader
+      >
+        <p>
+          (For now this just creates a default Model, but will have a customisable shape later.)
+        </p>
+      </ModalBody>
+      <ModalFooter>
+        <PrimaryButton
+          type="submit"
+          @click="onSubmit"
+        >Create Model</PrimaryButton>
+      </ModalFooter>
     </Modal>
   </div>
 </template>
@@ -20,12 +31,35 @@
 <script setup lang="ts">
 import PrimaryButton from '@/gui/components/buttons/PrimaryButton.vue'
 import Modal from '@/gui/components/modals/Modal.vue'
+import ModalBody from '@/gui/components/modals/ModalBody.vue'
+import ModalFooter from '@/gui/components/modals/ModalFooter.vue'
+import ModalHeading from '@/gui/components/modals/ModalHeader.vue'
 import { useNanonetStore } from '@/gui/stores/nanonetStore'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 const nanonetStore = useNanonetStore()
-const showTestModal = ref(true)
 
-const createModelButtonText = computed(() => nanonetStore.creating ? 'Creating...' : 'Create New Model')
+const creating = ref(false)
+
+const createFormValues = reactive({
+
+})
+
+const onCreateClicked = () => {
+  creating.value = true
+}
+
+const onSubmit = () => {
+  nanonetStore.createModel(createFormValues)
+  resetForm()
+}
+
+const abortCreation = () => resetForm()
+
+const resetForm = () => {
+  creating.value = false
+}
+
+const createModelButtonText = computed(() => creating.value ? 'Creating...' : 'Create New Model')
 
 </script>

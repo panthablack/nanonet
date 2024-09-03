@@ -7,7 +7,7 @@
     >
       <div class="modalContainer flex justify-center items-center h-full w-full">
         <div
-          class="modalBody bg-gray-50 p-8 rounded-md min-w-96"
+          class="modalContentContainer rounded-md min-w-96 bg-gray-50"
           @mousedown="onModalClicked"
         >
           <slot />

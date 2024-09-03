@@ -1,21 +1,18 @@
 import { ref, type Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { createNanonet as createNewNanonet } from '@/nanonet'
-import type { NanoNet } from '@/types/NanoNet'
+import { createModel as createNewModel } from '@/nanonet'
+import type { NanoNetModelOptions, NanoNetModel } from '@/types/NanoNet'
 
 export const useNanonetStore = defineStore('nanonetStore', () => {
-  const creating = ref(false)
-  const nanonet: Ref<NanoNet | null> = ref(null)
+  const models: Ref<NanoNetModel[]> = ref([])
 
-  const createNanonet = () => {
-    creating.value = true
-    nanonet.value = createNewNanonet()
-    console.log('nanonet', nanonet)
+  const isValidModel = (m: NanoNetModel) => !!m // TODO: validate model
+
+  const createModel = (options: NanoNetModelOptions): NanoNetModel => {
+    const model = createNewModel(options)
+    if (isValidModel(model)) models.value.push(model)
+    return model
   }
 
-  const abortCreation = () => {
-    creating.value = false
-  }
-
-  return { abortCreation, createNanonet, creating, nanonet }
+  return { createModel, models }
 })

@@ -1,9 +1,9 @@
 import { MODES } from '@/nanonet/config/constants'
 
-export type NanoNet = {
+export type NanoNetModel = {
   mode: (typeof MODES)[keyof typeof MODES]
 }
 
-export type NanoNetOptions = {
+export type NanoNetModelOptions = {
   mode?: (typeof MODES)[keyof typeof MODES]
 }

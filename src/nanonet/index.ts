@@ -1,16 +1,16 @@
-import type { NanoNet, NanoNetOptions } from '@/types/NanoNet'
+import type { NanoNetModel, NanoNetModelOptions } from '@/types/NanoNet'
 import { MODES } from './config/constants'
 
-export const createNanonet = (options?: NanoNetOptions): NanoNet => {
+export const createModel = (options?: NanoNetModelOptions): NanoNetModel => {
   // log options
-  console.debug('constructing nanonet', options)
+  console.debug('Constructing New NanoNet Model', options)
 
   // set defaults
   const DEFAULT_MODE = MODES.MULTILAYER_PERCEPTRON
 
   // create nanonet instance
-  const nanonet: NanoNet = { mode: DEFAULT_MODE }
+  const model: NanoNetModel = { mode: DEFAULT_MODE }
 
   // return the new instance
-  return nanonet
+  return model
 }
