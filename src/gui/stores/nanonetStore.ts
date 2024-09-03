@@ -13,5 +13,9 @@ export const useNanonetStore = defineStore('nanonetStore', () => {
     console.log('nanonet', nanonet)
   }
 
-  return { nanonet, createNanonet, creating }
+  const abortCreation = () => {
+    creating.value = false
+  }
+
+  return { abortCreation, createNanonet, creating, nanonet }
 })
