@@ -1,5 +1,10 @@
 <template>
   <div class="modelTrainingIndexViewContainer">
-    <h1>This is a model training index view.</h1>
+    <PageHeading>Training</PageHeading>
+    <h2>Please select a model:</h2>
   </div>
 </template>
+
+<script setup lang="ts">
+import PageHeading from '@/gui/components/pages/PageHeading.vue'
+</script>
