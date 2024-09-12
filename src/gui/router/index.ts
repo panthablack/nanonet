@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('@/gui/views/models/ModelsView.vue'),
     },
     {
+      path: '/visualisations/perceptron',
+      name: 'perceptron',
+      component: () => import('@/gui/views/visualisations/PerceptronView.vue'),
+    },
+    {
       path: '/models/train',
       name: 'model-train-index',
       component: () => import('@/gui/views/models/ModelTrainingIndexView.vue'),

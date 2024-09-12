@@ -8,5 +8,6 @@ import NavBarLink from '@/gui/components/nav/NavBarLink.vue'
     <NavBarLink to="/models">Models</NavBarLink>
     <NavBarLink to="/models/train">Training</NavBarLink>
     <NavBarLink to="/models/test">Testing</NavBarLink>
+    <NavBarLink to="/visualisations/perceptron">Perceptron</NavBarLink>
   </nav>
 </template>

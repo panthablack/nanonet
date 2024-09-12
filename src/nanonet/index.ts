@@ -1,5 +1,7 @@
 import type { NanoNetModel, NanoNetModelOptions } from '@/types/NanoNet'
 import { MODES } from './config/constants'
+import type { PerceptronOptions } from '@/types/Perceptron'
+import { Perceptron } from '@/nanonet/classes/Perceptron'
 
 export const createModel = (options?: NanoNetModelOptions): NanoNetModel => {
   // log options
@@ -14,3 +16,5 @@ export const createModel = (options?: NanoNetModelOptions): NanoNetModel => {
   // return the new instance
   return model
 }
+
+export const createPerceptron = (options: PerceptronOptions): Perceptron => new Perceptron(options)
