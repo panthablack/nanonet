@@ -1,5 +1,6 @@
 import { DEFAULT_PERCEPTRON_INPUT } from '@/nanonet/config/constants'
 import { getRandomFloat } from '@/nanonet/utilities/numbers'
+import { hadamardProduct } from '@/nanonet/utilities/vectors'
 import type { PerceptronOptions, PerceptronInput } from '@/types/Perceptron'
 import { cloneDeep } from 'lodash'
 import { Matrix } from 'ml-matrix'
@@ -32,17 +33,14 @@ export class Perceptron {
 
   getWeightedSum(testData: number[]) {
     // multiply 'inputs' vector by 'weights' then add 'biases' vector
-    const inputVector = new Matrix([testData])
-    const weightsVector = new Matrix([this.weights])
-    const biasesVector = new Matrix([this.biases])
-    const multiplied = Matrix.multiply(inputVector, weightsVector)
-    const added = Matrix.add(multiplied, biasesVector)
-    // debugger
-    return added.sum()
-    // return Matrix.add(Matrix.multiply(inputVector, weightsVector), biasesVector)
+    const iwVector = Matrix.columnVector(hadamardProduct(testData, this.weights))
+    const biasesVector = Matrix.columnVector(this.biases)
+    const added = Matrix.add(iwVector, biasesVector)
+    const sum = added.sum()
+    return sum
   }
 
-  guess(testData: number[]) {
+  run(testData: number[]) {
     if (this.inputs.length !== testData.length) throw 'invalid test data: invalid length'
     const ws = this.getWeightedSum(testData)
     return this.activationFunction(ws)
