@@ -1,40 +1,19 @@
-/.phpunit.cache
-/bootstrap/ssr
+# Dependencies and build output
 /node_modules
-/public/build
-/public/fonts-manifest.dev.json
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/resources/js/actions
-/resources/js/routes
-/resources/js/wayfinder
-/vendor
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-/auth.json
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
+/dist
 
-#AI
+# Logs and OS files
+*.log
+.DS_Store
+
+# Environment
+.env
+.env.*
+
+# Editors
+/.vscode
+/.idea
+
+# AI
 /.claude
 CLAUDE.md
-
-# API Specs - generated artifacts
-/specs/dist/
-/specs/postman/
-/specs/node_modules/
-
-/docker-compose.yaml

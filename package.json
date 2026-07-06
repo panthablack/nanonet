@@ -1,0 +1,42 @@
+{
+  "name": "nanonet",
+  "version": "2.0.0",
+  "description": "A lightweight, zero-dependency neural network class for JavaScript and TypeScript.",
+  "keywords": [
+    "neural-network",
+    "machine-learning",
+    "backpropagation",
+    "sgd"
+  ],
+  "license": "MIT",
+  "author": "James Randall",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panthablack/nanonet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/panthablack/nanonet/issues"
+  },
+  "homepage": "https://github.com/panthablack/nanonet#readme",
+  "type": "module",
+  "main": "./dist/nanonet.js",
+  "types": "./dist/nanonet.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/nanonet.d.ts",
+      "import": "./dist/nanonet.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "node --test \"test/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3"
+  }
+}
