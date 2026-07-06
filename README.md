@@ -1,5 +1,8 @@
 # nanonet
-A lightweight neural network class for JavaScript.
+
+A lightweight, zero-dependency neural network class for JavaScript.
+
+NanoNet implements a fully-connected feedforward neural network with sigmoid activation, trained by stochastic gradient descent (SGD) backpropagation. The whole library is a single ES module — `NanoNet/nanonet.js` — with a pre-minified copy at `NanoNet/nanonet.min.js`.
 
 ## Install Instructions
 
@@ -23,39 +26,39 @@ import NanoNet from 'nanonet'
 - Import the NanoNet class into your project, e.g.,
 
 ```javascript
-import NanoNet from './nanonet'
+import NanoNet from './NanoNet/nanonet.js'
 ```
 
 ## How to Use NanoNet
 
 ### Initialise
 
-- After importing the NanoNet class into your project (see above), you can create a new neural network instance as follows:
-```javascript
-let neuralNetwork = new NanoNet();
-```
-This initialises a neural network with one input layer, one hidden layer and one output layer by default.
+Create a new neural network by passing a structure array to the constructor:
 
-- To define the structure of the network, pass in an array to the class constructor as follows:
 ```javascript
-// The structure can be any array of integers >= 1 and with length >= 2.  
-let structure = [8,4,2];
+// The structure can be any array of integers >= 1 and with length >= 2.
+let structure = [8, 4, 2];
 let neuralNetwork = new NanoNet(structure);
 ```
-The array length defines the number of layers in the network, whilst the integer values define how many neurons should be initialised in each layer, e.g., a network with an input layer with 16 neurons and an output layer with 9 neurons would have a structure [16,9].  To add in 3 hidden layers, with 4,5 and 6 neurons respectively, the structure becomes [16,4,5,6,9].
 
-The default structure is [2,2,2].
+The array length defines the number of layers in the network, whilst the integer values define how many neurons should be initialised in each layer, e.g., a network with an input layer with 16 neurons and an output layer with 9 neurons would have a structure `[16,9]`. To add in 3 hidden layers, with 4, 5 and 6 neurons respectively, the structure becomes `[16,4,5,6,9]`.
+
+**Important** \- The structure argument is required; calling `new NanoNet()` without one will throw.
+
+On initialisation, weights are set randomly in the range [-1, 1) and biases start at 0.
 
 ### Methods
 
 #### .feedForward(inputData)
+
 ```javascript
-let inputData = [7.5,0.40576,8];
+let inputData = [7.5, 0.40576, 8];
 let fed = neuralNetwork.feedForward(inputData);
 ```
-Given an array of input data, the feedForward method feeds the data forwards through the network and returns the NanoNet instance that was fed.  *Data must be numeric.*
 
-**Important** \- The length of the array must match the length of the input layer to the network.  Hopefully this is intuitive as each piece of data corresponds to an input activation.
+Given an array of input data, the feedForward method feeds the data forwards through the network and returns the NanoNet instance that was fed. *Data must be numeric.*
+
+**Important** \- The length of the array must match the length of the input layer to the network. Hopefully this is intuitive as each piece of data corresponds to an input activation.
 
 In order to retrieve the output activations use the **output** getter, e.g.,
 
@@ -68,19 +71,21 @@ let output = fed.output;
 Given an array of training data, the network will be trained (i.e., will update its weights and biases using SGD style backpropagation).
 
 Training data *must be numeric* and structured as follows:
+
 ```javascript
 let trainingData = [
   // Each element in the array is a training instance.
   [
     // Each training instance is expected to hold two arrays, the first
     // holding the input data (see .feedForward)
-    [7.5,0.40576,8],
+    [7.5, 0.40576, 8],
     // and the second holding the expected output
-    [0,1],
+    [0, 1],
   ], // ...
 ];
 let trained = neuralNetwork.train(trainingData);
 ```
+
 The train method returns the updated instance of the NanoNet class.
 
 **Important** \- The length of the input and expected output arrays must match the input and output structure of the network.
@@ -90,11 +95,13 @@ The train method returns the updated instance of the NanoNet class.
 #### learningRate
 
 The learning rate can be manually updated by reassigning the value of the property:
+
 ```javascript
-let neuralNetwork = new NanoNet();
+let neuralNetwork = new NanoNet([2, 2, 2]);
 neuralNetwork.learningRate = 0.02;
 ```
-The default learning rate is 0.1;
+
+The default learning rate is 0.1.
 
 ### Getters
 
@@ -107,4 +114,5 @@ Returns an array containing the network's current input values.
 Returns an array containing the network's current output activations.
 
 ## License
+
 [MIT](http://opensource.org/licenses/MIT)

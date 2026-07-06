@@ -30,6 +30,7 @@ yarn-error.log
 
 #AI
 /.claude
+CLAUDE.md
 
 # API Specs - generated artifacts
 /specs/dist/
