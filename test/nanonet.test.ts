@@ -39,12 +39,42 @@ test('train rejects malformed expected output', () => {
   assert.throws(() => net.train([[[0, 1], [0, 1]]]), RangeError);
 });
 
-test('getters return copies, not live internal state', () => {
+test('getters return plain-array copies, not live internal state', () => {
   const net = new NanoNet([2, 2]);
   net.feedForward([1, 1]);
+  assert.ok(Array.isArray(net.input));
+  assert.ok(Array.isArray(net.output));
   const output = net.output;
   output[0] = 999;
   assert.notEqual(net.output[0], 999);
+});
+
+test('repeated feeds do not leak state between calls', () => {
+  const net = new NanoNet([2, 3, 2]);
+  const first = net.feedForward([0.25, 0.75]).output;
+  net.feedForward([0.9, 0.1]);
+  const repeat = net.feedForward([0.25, 0.75]).output;
+  assert.deepEqual(repeat, first);
+});
+
+test('a small gradient step never increases per-sample error', () => {
+  for (let trial = 0; trial < 20; trial++) {
+    const net = new NanoNet([3, 4, 4, 2]);
+    net.learningRate = 0.01;
+    const input = [Math.random(), Math.random(), Math.random()];
+    const expected = [Math.random(), Math.random()];
+    const errorFor = () => {
+      const output = net.feedForward(input).output;
+      return expected.reduce((sum, e, i) => sum + (output[i] - e) ** 2, 0);
+    };
+    const before = errorFor();
+    net.train([[input, expected]]);
+    const after = errorFor();
+    assert.ok(
+      after <= before,
+      `error rose after one small gradient step: before=${before}, after=${after}`,
+    );
+  }
 });
 
 test('training reduces error on a deep network', () => {

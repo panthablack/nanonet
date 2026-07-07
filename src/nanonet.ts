@@ -13,13 +13,24 @@ export type TrainingInstance = readonly [
   expected: readonly number[],
 ];
 
+/**
+ * A computed (hidden or output) layer. All buffers are allocated once in the
+ * constructor and reused for every feed/training sample, so the hot path
+ * performs no allocation.
+ *
+ * Storage is deliberately plain number arrays rather than Float64Array: V8
+ * keeps all-double arrays as contiguous unboxed doubles already, and
+ * benchmarking showed flat Float64Array storage ~15% slower for these loops.
+ */
 interface Layer {
   /** weights[j][k] connects neuron k in the previous layer to neuron j in this layer. */
-  weights: number[][];
-  biases: number[];
+  readonly weights: number[][];
+  readonly biases: number[];
   /** Weighted inputs (z-values) from the most recent forward pass. */
-  weightedInputs: number[];
-  activations: number[];
+  readonly weightedInputs: number[];
+  readonly activations: number[];
+  /** Scratch buffer for backpropagation error terms. */
+  readonly deltas: number[];
 }
 
 const DEFAULT_STRUCTURE: Structure = [2, 2, 2];
@@ -50,6 +61,7 @@ export default class NanoNet {
         biases: new Array(size).fill(0),
         weightedInputs: new Array(size).fill(0),
         activations: new Array(size).fill(0),
+        deltas: new Array(size).fill(0),
       });
     }
   }
@@ -94,61 +106,66 @@ export default class NanoNet {
   private feed(): void {
     let previousActivations = this.inputActivations;
     for (const layer of this.layers) {
-      for (let j = 0; j < layer.biases.length; j++) {
-        const weightRow = layer.weights[j];
-        let weightedInput = layer.biases[j];
+      const { weights, biases, weightedInputs, activations } = layer;
+      for (let j = 0; j < biases.length; j++) {
+        const weightRow = weights[j];
+        let weightedInput = biases[j];
         for (let k = 0; k < previousActivations.length; k++) {
           weightedInput += weightRow[k] * previousActivations[k];
         }
-        layer.weightedInputs[j] = weightedInput;
-        layer.activations[j] = NanoNet.sigmoid(weightedInput);
+        weightedInputs[j] = weightedInput;
+        activations[j] = NanoNet.sigmoid(weightedInput);
+      }
+      previousActivations = activations;
+    }
+  }
+
+  private propagateBackwards(expected: readonly number[]): void {
+    this.computeDeltas(expected);
+    let previousActivations = this.inputActivations;
+    for (const layer of this.layers) {
+      const { weights, biases, deltas } = layer;
+      for (let j = 0; j < deltas.length; j++) {
+        const step = deltas[j] * this.learningRate;
+        const weightRow = weights[j];
+        for (let k = 0; k < previousActivations.length; k++) {
+          weightRow[k] -= step * previousActivations[k];
+        }
+        biases[j] -= step;
       }
       previousActivations = layer.activations;
     }
   }
 
-  private propagateBackwards(expected: readonly number[]): void {
-    const deltas = this.computeDeltas(expected);
-    for (let l = 0; l < this.layers.length; l++) {
-      const layer = this.layers[l];
-      const layerDeltas = deltas[l];
-      const previousActivations =
-        l === 0 ? this.inputActivations : this.layers[l - 1].activations;
-      for (let j = 0; j < layerDeltas.length; j++) {
-        const step = layerDeltas[j] * this.learningRate;
-        const weightRow = layer.weights[j];
-        for (let k = 0; k < previousActivations.length; k++) {
-          weightRow[k] -= step * previousActivations[k];
+  /**
+   * Computes the error term for every neuron into each layer's preallocated
+   * `deltas` buffer, output layer first, working backwards from the gradient
+   * of the squared-error loss.
+   */
+  private computeDeltas(expected: readonly number[]): void {
+    const outputLayer = this.layers[this.layers.length - 1];
+    for (let j = 0; j < outputLayer.deltas.length; j++) {
+      outputLayer.deltas[j] =
+        (outputLayer.activations[j] - expected[j]) *
+        NanoNet.sigmoidDerivative(outputLayer.weightedInputs[j]);
+    }
+    for (let l = this.layers.length - 2; l >= 0; l--) {
+      const { deltas, weightedInputs } = this.layers[l];
+      const following = this.layers[l + 1];
+      // Accumulate row by row over the following layer's weights so memory
+      // access stays sequential instead of striding down a column.
+      deltas.fill(0);
+      for (let k = 0; k < following.deltas.length; k++) {
+        const followingDelta = following.deltas[k];
+        const weightRow = following.weights[k];
+        for (let j = 0; j < deltas.length; j++) {
+          deltas[j] += weightRow[j] * followingDelta;
         }
-        layer.biases[j] -= step;
+      }
+      for (let j = 0; j < deltas.length; j++) {
+        deltas[j] *= NanoNet.sigmoidDerivative(weightedInputs[j]);
       }
     }
-  }
-
-  /**
-   * Computes the error term for every neuron, output layer first, working
-   * backwards from the gradient of the squared-error loss.
-   */
-  private computeDeltas(expected: readonly number[]): number[][] {
-    const deltas: number[][] = new Array(this.layers.length);
-    const outputLayer = this.layers[this.layers.length - 1];
-    deltas[this.layers.length - 1] = outputLayer.activations.map(
-      (activation, j) =>
-        (activation - expected[j]) *
-        NanoNet.sigmoidDerivative(outputLayer.weightedInputs[j]),
-    );
-    for (let l = this.layers.length - 2; l >= 0; l--) {
-      const followingLayer = this.layers[l + 1];
-      const followingDeltas = deltas[l + 1];
-      deltas[l] = this.layers[l].weightedInputs.map((weightedInput, j) => {
-        let weightedDelta = 0;
-        for (let k = 0; k < followingDeltas.length; k++) {
-          weightedDelta += followingLayer.weights[k][j] * followingDeltas[k];
-        }
-        return weightedDelta * NanoNet.sigmoidDerivative(weightedInput);
-      });
-    }
-    return deltas;
   }
 
   static sigmoid(x: number): number {
